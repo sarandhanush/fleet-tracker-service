@@ -1,5 +1,6 @@
 # Fleet Tracker Service
    Backend fleet tracking with Go, Gin, PostgreSQL, and Redis.
+![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/3db445f294dcf2a7a8a93c279996d24d6e0db17f/Fleet-tracker-service.png)
 Features :
 - Backend: Go + Gin
 - Database: PostgreSQL for vehicles & trips
