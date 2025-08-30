@@ -12,7 +12,7 @@ Features :
 - Unit Tests: Minimal table-driven tests
 
 ## Project Structure
-`
+```
 cmd/               → Application entry (main.go)
 docs/              → API docs (Postman, curl, Swagger)
 internal/
@@ -29,7 +29,7 @@ Dockerfile         → To build Docker image of app
 go.mod             → To defines app dependencies
 go.sum             → To keep the checksums of module dependencies
 Makefile           → Quick commands to build, run, test, and manage migrations.
-`
+```
 
 ## Quick start (using Docker)
 
