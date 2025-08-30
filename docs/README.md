@@ -43,12 +43,12 @@ Makefile           → Quick commands to build, run, test, and manage migrations
     ```
     Docker Container Running 
     ```
-    ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/539f456c398f8f8b85b9905ab742565e7fe46428/docker_image.png))
+    ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/539f456c398f8f8b85b9905ab742565e7fe46428/docker_image.png)
    
     ```
     Swagger Image Attachment
     ```
-    ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/539f456c398f8f8b85b9905ab742565e7fe46428/swagger_page.png)))
+    ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/539f456c398f8f8b85b9905ab742565e7fe46428/swagger_page.png))
 
 3. The app will be available at `http://localhost:8080`.
    - POST `/login` with `{"username":"demo-user","password":"demo-pass"}` to get a JWT.
