@@ -41,17 +41,15 @@ Makefile           → Quick commands to build, run, test, and manage migrations
    ```
     ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/2a0d52dc70da8d4de6efd746f27c5c8ab1843be1/docker_up.png)
 
-    ```
-    Docker Container Running 
-    ```
+    # Docker Container Running
+   
     ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/539f456c398f8f8b85b9905ab742565e7fe46428/docker_image.png)
    
-    ```
-    Swagger Image Attachment
-    ```
+   # Swagger Image Attachment
+    
     ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/539f456c398f8f8b85b9905ab742565e7fe46428/swagger_page.png)
 
-3. The app will be available at `http://localhost:8080`.
+4. The app will be available at `http://localhost:8080`.
    - POST `/login` with `{"username":"demo-user","password":"demo-pass"}` to get a JWT.
    - Use `Authorization: Bearer <token>` for protected endpoints.
 
@@ -73,12 +71,14 @@ Initial schema & indexes in /migrations:
 001_init.up.sql / 001_init.down.sql
 002_index.up.sql / 002_index.down.sql
 
-# Migrate up
+   Migrate up
+   ```
 migrate -path ./migrations -database "$DB_URL" up
-
-# Migrate down
+ ```
+   Migrate down
+ ```
 migrate -path ./migrations -database "$DB_URL" down 1
-
+ ```
 ## Tests
 
 Run unit tests:
