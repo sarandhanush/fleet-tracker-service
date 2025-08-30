@@ -1,0 +1,13 @@
+# Example curl commands
+
+LOGIN:
+curl -X POST http://localhost:8080/login -H 'Content-Type: application/json' -d '{"username":"demo-user","password":"demo-pass"}'
+
+INGEST (replace <token>):
+curl -X POST http://localhost:8080/api/vehicle/ingest -H "Authorization: Bearer <token>" -H 'Content-Type: application/json' -d '{ "vehicle_id": "d9c1b442-fb2f-412a-9d2a-a3ab499cd91c", "status": { "location":[55.296249,25.276987], "speed": 60.5, "timestamp": "2025-06-17T09:12:00Z" } }'
+
+STATUS:
+curl -H "Authorization: Bearer <token>" "http://localhost:8080/api/vehicle/status?vehicle_id=d9c1b442-fb2f-412a-9d2a-a3ab499cd91c"
+
+TRIPS:
+curl -H "Authorization: Bearer <token>" "http://localhost:8080/api/vehicle/trips?vehicle_id=d9c1b442-fb2f-412a-9d2a-a3ab499cd91c"

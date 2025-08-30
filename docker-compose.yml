@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: fleet
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    container_name: redis
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  app-server:
+    container_name: app-server
+    build: .
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      PORT: 8080
+      JWT_SECRET: fleet-tracker
+      DB_URL: postgres://postgres:postgres@postgres:5432/fleet?sslmode=disable
+      REDIS_ADDR: redis:6379
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

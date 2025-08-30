@@ -1,0 +1,173 @@
+{
+	"info": {
+		"_postman_id": "49b3d78e-884a-487d-bc11-e6a1656a6f9d",
+		"name": "Fleet Tracker API",
+		"description": "Postman collection for testing Fleet Tracker API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17916321"
+	},
+	"item": [
+		{
+			"name": "Login (Get JWT)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Try to parse token from JSON response",
+							"let jsonData;",
+							"try {",
+							"  jsonData = pm.response.json();",
+							"} catch (e) {",
+							"  jsonData = null;",
+							"}",
+							"",
+							"// If server returns JSON with token",
+							"if (jsonData && jsonData.token) {",
+							"  pm.collectionVariables.set(\"token\", jsonData.token);",
+							"  console.log(\"Token saved to collection variable: \", jsonData.token);",
+							"}",
+							"",
+							"// If token comes via Set-Cookie (auth_token)",
+							"let authCookie = pm.cookies.get(\"auth_token\");",
+							"if (authCookie) {",
+							"  pm.collectionVariables.set(\"token\", authCookie);",
+							"  console.log(\"Token saved from cookie: \", authCookie);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"demo-user\",\n  \"password\": \"demo-pass\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ingest Vehicle Status",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"vehicle_id\": \"VEH123\",\n  \"status\": {\n    \"location\": [55.27, 25.20],\n    \"speed\": 65,\n    \"timestamp\": \"2025-08-30T10:00:00Z\"\n  }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/vehicle/ingest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"vehicle",
+						"ingest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Vehicle Status",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/vehicle/status?vehicle_id=VEH123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"vehicle",
+						"status"
+					],
+					"query": [
+						{
+							"key": "vehicle_id",
+							"value": "VEH123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Vehicle Trips (24h)",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/vehicle/trips?vehicle_id=VEH123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"vehicle",
+						"trips"
+					],
+					"query": [
+						{
+							"key": "vehicle_id",
+							"value": "VEH123"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": ""
+		}
+	]
+}

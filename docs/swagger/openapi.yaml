@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+  title: Fleet Tracker Testing
+  version: "1.0.0"
+  description: Minimal Fleet Tracker API
+servers:
+  - url: http://localhost:8080
+paths:
+  /login:
+    post:
+      summary: Login to get JWT (demo-user/demo-pass)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: token
+  /api/vehicle/ingest:
+    post:
+      summary: Ingest vehicle status (protected)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ingest'
+      responses:
+        "200":
+          description: ok
+  /api/vehicle/status:
+    get:
+      summary: Get vehicle status (cached)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: vehicle_id
+          schema:
+            type: string
+      responses:
+        "200":
+          description: status
+  /api/vehicle/trips:
+    get:
+      summary: Get trips for past 24 hours
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: vehicle_id
+          schema:
+            type: string
+      responses:
+        "200":
+          description: trips
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Ingest:
+      type: object
+      properties:
+        vehicle_id:
+          type: string
+        status:
+          type: object
+          properties:
+            location:
+              type: array
+              items:
+                type: number
+            speed:
+              type: number
+            timestamp:
+              type: string

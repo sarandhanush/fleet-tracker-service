@@ -1,0 +1,5 @@
+
+DROP TABLE IF EXISTS trips;
+DROP TABLE IF EXISTS vehicle;
+DROP TABLE IF EXISTS schema_migrations;
+DROP EXTENSION IF EXISTS "uuid-ossp";
