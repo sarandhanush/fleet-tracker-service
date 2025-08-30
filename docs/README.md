@@ -38,6 +38,7 @@ Makefile           → Quick commands to build, run, test, and manage migrations
    ```
    docker-compose up --build
    ```
+    ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/2a0d52dc70da8d4de6efd746f27c5c8ab1843be1/docker_up.png)
 3. The app will be available at `http://localhost:8080`.
    - POST `/login` with `{"username":"demo-user","password":"demo-pass"}` to get a JWT.
    - Use `Authorization: Bearer <token>` for protected endpoints.
