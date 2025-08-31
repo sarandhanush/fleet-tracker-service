@@ -87,24 +87,37 @@ go test ./...
 ```
 ## Docker Setup
 
-### Build Docker Image
+Build Docker Image
+```
 docker build -f Dockerfile -t fleet-tracker .
+```
 
-### Save Docker Image to TAR
+Save Docker Image to TAR
+```
 docker save -o fleet-tracker.tar fleet-tracker
-
-### Load Docker Image from TAR
+```
+Load Docker Image from TAR
+```
 docker load -i fleet-tracker.tar
+```
 
-### Run Docker Container
+Run Docker Container
+```
 docker run -d --name fleet-tracker-app -p 8080:8080 fleet-tracker
+```
 
-### Check Running Containers
+Check Running Containers
+```
 docker ps
+```
 
-### Stop Docker Container
+Stop Docker Container
+```
 docker stop fleet-tracker-app
+```
 
-### Remove Docker Container
+Remove Docker Container
+```
 docker rm fleet-tracker-app
+```
 
