@@ -43,12 +43,10 @@ From the project root, you can start the application and required services:
 
 ```
 make run
-
 ```
 To run unit tests:
 ```
 make test
-
 ```
 
 ## Quick start (using Docker)
