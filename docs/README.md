@@ -32,6 +32,25 @@ go.sum             → To keep the checksums of module dependencies
 Makefile           → Quick commands to build, run, test, and manage migrations.
 ```
 
+## ⚙️ Run Locally Using Makefile
+
+> **Note:** Make sure you have the following installed on your machine:
+> - Go (1.21+ recommended)
+> - PostgreSQL
+> - Redis
+
+From the project root, you can start the application and required services:
+
+```
+make run
+
+```
+To run unit tests:
+```
+make test
+
+```
+
 ## Quick start (using Docker)
 
 1. Copy `.env` to `.env` and edit if needed.
