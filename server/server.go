@@ -46,7 +46,7 @@ func Run() error {
 		return err
 	}
 
-	// Initialize Redis DB
+	// Initialize Redis
 	rdb := redis.NewClient(&redis.Options{Addr: redisAddr})
 	defer rdb.Close()
 
