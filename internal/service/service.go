@@ -2,8 +2,6 @@ package service
 
 import (
 	"context"
-	"crypto/rand"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -13,34 +11,19 @@ import (
 	"github.com/google/uuid"
 
 	"fleet-tracker-service/internal/model"
-	"fleet-tracker-service/internal/repository"
-
-	"github.com/redis/go-redis/v9"
 )
 
-type IngestPayload struct {
-	VehicleID   string                 `json:"vehicle_id"`
-	PlateNumber string                 `json:"plate_number"`
-	Status      map[string]interface{} `json:"status"`
-}
-
 type Service struct {
-	repo *repository.Repo
-	rdb  *redis.Client
+	repo Repo
+	rdb  RedisClient
 }
 
-func NewService(r *repository.Repo, rdb *redis.Client) *Service {
+func NewService(r Repo, rdb RedisClient) *Service {
 	return &Service{repo: r, rdb: rdb}
 }
 
 func cacheKeyStatus(vehicleID string) string {
 	return fmt.Sprintf("vehicle:%s:status", vehicleID)
-}
-
-func randID() string {
-	b := make([]byte, 8)
-	_, _ = rand.Read(b)
-	return hex.EncodeToString(b)
 }
 
 func (s *Service) Ingest(ctx context.Context, p IngestPayload) error {
@@ -72,7 +55,7 @@ func (s *Service) Ingest(ctx context.Context, p IngestPayload) error {
 	}
 	key := cacheKeyStatus(p.VehicleID)
 	b, _ := json.Marshal(p.Status)
-	if err := s.rdb.Set(ctx, key, b, 5*time.Minute).Err(); err != nil {
+	if err := s.rdb.Set(ctx, key, b, 5*time.Minute); err != nil {
 		fmt.Println("redis set error:", err)
 	}
 	return nil
@@ -80,14 +63,15 @@ func (s *Service) Ingest(ctx context.Context, p IngestPayload) error {
 
 func (s *Service) GetStatus(ctx context.Context, vehicleID string) (map[string]interface{}, error) {
 	key := cacheKeyStatus(vehicleID)
-	vcmd := s.rdb.Get(ctx, key)
-	var raw string
-	if err := vcmd.Scan(&raw); err == nil {
+
+	raw, err := s.rdb.Get(ctx, key)
+	if err == nil {
 		var m map[string]interface{}
-		if err := json.Unmarshal([]byte(raw), &m); err == nil {
+		if jsonErr := json.Unmarshal([]byte(raw), &m); jsonErr == nil {
 			return m, nil
 		}
 	}
+
 	st, err := s.repo.GetVehicleStatus(ctx, vehicleID)
 	if err != nil {
 		return nil, err
@@ -95,7 +79,7 @@ func (s *Service) GetStatus(ctx context.Context, vehicleID string) (map[string]i
 	if st == nil {
 		return nil, nil
 	}
-	if err := s.rdb.Set(ctx, key, st, 5*time.Minute).Err(); err != nil {
+	if err := s.rdb.Set(ctx, key, st, 5*time.Minute); err != nil {
 		fmt.Println("redis set error:", err)
 	}
 	return st, nil
