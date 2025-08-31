@@ -100,8 +100,14 @@ migrate -path ./migrations -database "$DB_URL" down 1
 
 Run unit tests:
 ```
-go test ./...
+go test ./internal/service/...
 ```
+![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/528a13819972c15b815eab5f7d34c4cd591f6060/test_complete.png)
+
+Detailed test result
+
+![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/528a13819972c15b815eab5f7d34c4cd591f6060/test_result.png)
+
 ## Docker Setup
 
 Build Docker Image
