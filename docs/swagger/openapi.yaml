@@ -8,7 +8,7 @@ servers:
 paths:
   /login:
     post:
-      summary: Login to get JWT (demo-user/demo-pass)
+      summary: Login to get JWT (admin/admin@2025)
       requestBody:
         content:
           application/json:

@@ -26,4 +26,5 @@ CREATE TABLE IF NOT EXISTS trips (
     end_time TIMESTAMP,
     mileage FLOAT,
     avg_speed FLOAT
+    -- created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 );

@@ -20,7 +20,6 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-// Run initializes and starts the HTTP server
 func Run() error {
 	_ = godotenv.Load()
 
@@ -34,7 +33,7 @@ func Run() error {
 		return err
 	}
 
-	// Initialize DB
+	// Initialize Postgres DB
 	db, err := sql.Open("postgres", pgDSN)
 	if err != nil {
 		return err
@@ -45,7 +44,7 @@ func Run() error {
 		return err
 	}
 
-	// Initialize Redis
+	// Initialize Redis DB
 	rdb := redis.NewClient(&redis.Options{Addr: redisAddr})
 	defer rdb.Close()
 
@@ -53,14 +52,14 @@ func Run() error {
 		return err
 	}
 
-	// Setup dependencies
+	// To Setup dependencies
 	repo := repository.NewRepo(db)
 	svc := service.NewService(repo, rdb)
 	authSvc := auth.NewJWT([]byte(jwtSecret))
 
-	// Setup Gin
+	// To Setup Gin Router
 	router := gin.New()
-	router.Use(gin.Recovery(), handlers.RequestLogger())
+	router.Use(gin.Recovery(), auth.RequestLogger())
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
@@ -68,17 +67,17 @@ func Run() error {
 		AllowHeaders: []string{"Origin", "Authorization", "Content-Type"},
 	}))
 
-	// Root redirect to Swagger UI
+	// To redirect to Swagger UI by default
 	router.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusSeeOther, "/docs/swagger/index.html")
 	})
 
 	router.POST("/login", handlers.LoginHandler(authSvc))
 
-	// Serve static Swagger folder
+	// To Serve static Swagger folder
 	router.Static("/docs/swagger", "./docs/swagger")
 
-	// Protected API routes
+	// To Protected API routes
 	api := router.Group("/api")
 	api.Use(auth.JWTMiddleware(authSvc))
 	{
@@ -87,7 +86,7 @@ func Run() error {
 		api.GET("/vehicle/trips", handlers.TripsHandler(svc))
 	}
 
-	// Start simulator
+	// Start simulator in background
 	go svc.StartSimulator(context.Background())
 
 	// Start server

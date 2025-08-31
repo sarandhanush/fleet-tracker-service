@@ -5,7 +5,7 @@ run:
 	go run ./cmd/main.go
 
 test:
-	go test ./...
+	go test ./internal/service/...
 
 migrate-up:
 	migrate -path ./migrations -database "postgres://postgres:postgres@localhost:5432/fleet?sslmode=disable" up

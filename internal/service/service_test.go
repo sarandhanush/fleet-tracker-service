@@ -31,7 +31,6 @@ func TestRandIDUnique(t *testing.T) {
 	}
 }
 
-
 func TestRedisSetGetIntegration(t *testing.T) {
 	rdb := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
 	ctx := context.Background()

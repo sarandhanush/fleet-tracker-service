@@ -50,12 +50,12 @@ Makefile           → Quick commands to build, run, test, and manage migrations
     ![Uploading image.png…](https://github.com/sarandhanush/fleet-tracker-service/blob/539f456c398f8f8b85b9905ab742565e7fe46428/swagger_page.png)
 
 4. The app will be available at `http://localhost:8080`.
-   - POST `/login` with `{"username":"demo-user","password":"demo-pass"}` to get a JWT.
+   - POST `/login` with `{"username":"admin","password":"admin@2025"}` to get a JWT.
    - Use `Authorization: Bearer <token>` for protected endpoints.
 
 ## Endpoints
 
-- `POST /login` — get JWT (demo-user/demo-pass)
+- `POST /login` — get JWT (admin/admin@2025)
 - `POST /api/vehicle/ingest` — ingest sensor payload (protected)
 - `GET /api/vehicle/status?vehicle_id=<uuid>` — cached status (protected)
 - `GET /api/vehicle/trips?vehicle_id=<uuid>` — trips past 24 hours (protected)

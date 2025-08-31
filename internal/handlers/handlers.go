@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 	"time"
 
@@ -16,6 +15,7 @@ type loginReq struct {
 	Password string `json:"password"`
 }
 
+// LoginHandler handles user login and returns a JWT token
 func LoginHandler(a *auth.JWTService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var r loginReq
@@ -24,11 +24,11 @@ func LoginHandler(a *auth.JWTService) gin.HandlerFunc {
 			return
 		}
 
-		if r.Username != "demo-user" || r.Password != "demo-pass" {
+		if r.Username != "admin" || r.Password != "admin@2025" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid credentials"})
 			return
 		}
-		tok, err := a.GenerateToken("demo-user", 24*time.Hour)
+		tok, err := a.GenerateToken("admin", 24*time.Hour)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "could not generate token"})
 			return
@@ -37,6 +37,7 @@ func LoginHandler(a *auth.JWTService) gin.HandlerFunc {
 	}
 }
 
+// IngestHandler handles vehicle data ingestion
 func IngestHandler(svc *service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload service.IngestPayload
@@ -52,6 +53,7 @@ func IngestHandler(svc *service.Service) gin.HandlerFunc {
 	}
 }
 
+// StatusHandler retrieves the latest status of a vehicle
 func StatusHandler(svc *service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		vid := c.Query("vehicle_id")
@@ -68,6 +70,7 @@ func StatusHandler(svc *service.Service) gin.HandlerFunc {
 	}
 }
 
+// TripsHandler retrieves trips of a vehicle in the last 24 hours
 func TripsHandler(svc *service.Service) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		vid := c.Query("vehicle_id")
@@ -81,17 +84,5 @@ func TripsHandler(svc *service.Service) gin.HandlerFunc {
 			return
 		}
 		c.JSON(http.StatusOK, trips)
-	}
-}
-
-func RequestLogger() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		start := time.Now()
-		c.Next()
-		dur := time.Since(start)
-		status := c.Writer.Status()
-		ctx := context.Background()
-		_ = ctx
-		println(time.Now().Format(time.RFC3339), c.Request.Method, c.Request.URL.Path, "status=", status, "duration=", dur.String())
 	}
 }

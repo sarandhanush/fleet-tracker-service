@@ -137,7 +137,6 @@ func (s *Service) StartSimulator(ctx context.Context) {
 	}()
 }
 
-// small helpers for randomness
 func randOffset() float64 {
 	return (randFloat(-0.001, 0.001))
 }

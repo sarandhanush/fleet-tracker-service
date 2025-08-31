@@ -49,7 +49,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"username\": \"demo-user\",\n  \"password\": \"demo-pass\"\n}"
+					"raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin@2025\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8080/login",
