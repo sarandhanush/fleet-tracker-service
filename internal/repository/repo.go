@@ -12,6 +12,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var (
+	ErrNoTrips        = errors.New("trips not found")
+	ErrNoVehicleFound = errors.New("Vehicle not found")
+)
+
 type Repo struct {
 	db *sql.DB
 }
@@ -40,10 +45,11 @@ func (r *Repo) GetVehicleStatus(ctx context.Context, vehicleID string) (map[stri
 	row := r.db.QueryRowContext(ctx, `SELECT last_status FROM vehicle WHERE id = $1`, vehicleID)
 	if err := row.Scan(&b); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
+			return nil, ErrNoVehicleFound
 		}
 		return nil, err
 	}
+
 	var out map[string]interface{}
 	if err := json.Unmarshal(b, &out); err != nil {
 		return nil, err
@@ -70,6 +76,7 @@ func (r *Repo) GetTripsSince(ctx context.Context, vehicleID string, since time.T
 		return nil, err
 	}
 	defer rows.Close()
+
 	var res []model.Trip
 	for rows.Next() {
 		var t model.Trip
@@ -78,6 +85,11 @@ func (r *Repo) GetTripsSince(ctx context.Context, vehicleID string, since time.T
 		}
 		res = append(res, t)
 	}
+
+	if len(res) == 0 {
+		return nil, ErrNoTrips
+	}
+
 	return res, nil
 }
 

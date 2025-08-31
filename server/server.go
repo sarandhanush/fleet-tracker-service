@@ -27,6 +27,8 @@ func Run() error {
 	jwtSecret := mustGetenv("JWT_SECRET", "fleet-tracker")
 	pgDSN := mustGetenv("DB_URL", "postgres://postgres:postgres@postgres:5432/fleet?sslmode=disable")
 	redisAddr := mustGetenv("REDIS_ADDR", "redis:6379")
+	issuer := mustGetenv("JWT_ISSUER", "fleet-tracker")
+	aud := mustGetenv("JWT_AUD", "fleet-clients")
 
 	// Run migrations
 	if err := runMigrations(pgDSN); err != nil {
@@ -55,7 +57,7 @@ func Run() error {
 	// To Setup dependencies
 	repo := repository.NewRepo(db)
 	svc := service.NewService(repo, rdb)
-	authSvc := auth.NewJWT([]byte(jwtSecret))
+	authSvc := auth.NewJWT([]byte(jwtSecret), issuer, aud)
 
 	// To Setup Gin Router
 	router := gin.New()

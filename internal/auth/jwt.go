@@ -12,11 +12,17 @@ import (
 )
 
 type JWTService struct {
-	secret []byte
+	secret   []byte
+	issuer   string
+	audience string
 }
 
-func NewJWT(secret []byte) *JWTService {
-	return &JWTService{secret: secret}
+func NewJWT(secret []byte, issuer, audience string) *JWTService {
+	return &JWTService{
+		secret:   secret,
+		issuer:   issuer,
+		audience: audience,
+	}
 }
 
 func JWTMiddleware(a *JWTService) gin.HandlerFunc {
@@ -45,10 +51,10 @@ func JWTMiddleware(a *JWTService) gin.HandlerFunc {
 }
 
 func (j *JWTService) GenerateToken(sub string, expires time.Duration) (string, error) {
-	now := time.Now()
+	now := time.Now().UTC()
 	claims := jwt.MapClaims{
-		"iss": "fleet-tracker",
-		"aud": "fleet-clients",
+		"iss": j.issuer,
+		"aud": j.audience,
 		"sub": sub,
 		"iat": now.Unix(),
 		"exp": now.Add(expires).Unix(),

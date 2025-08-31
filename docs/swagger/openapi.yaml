@@ -32,9 +32,27 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Ingest'
+            example:
+              vehicle_id: "d9c1b442-fb2f-412a-9d2a-a3ab499cd91c"
+              plate_number: "DXB-12345"
+              status:
+                location: [55.296249, 25.276987]
+                speed: 60.5
+                fuel_level: 78
+                timestamp: "2025-06-17T09:12:00Z"
       responses:
         "200":
-          description: ok
+          description: successful ingestion
+          content:
+            application/json:
+              example:
+                ok: true
+        "400":
+          description: invalid input
+          content:
+            application/json:
+              example:
+                error: "pq: invalid input syntax for type uuid: \"1\""
   /api/vehicle/status:
     get:
       summary: Get vehicle status (cached)
@@ -47,7 +65,25 @@ paths:
             type: string
       responses:
         "200":
-          description: status
+          description: vehicle status
+          content:
+            application/json:
+              example:
+                location: [55.296645000000005, 25.277493]
+                speed: 69.22
+                timestamp: "2025-08-31T07:50:30Z"
+        "400":
+          description: invalid input
+          content:
+            application/json:
+              example:
+                error: "pq: invalid input syntax for type uuid: \"d9c1b442-fb2f-412a-9d2a-\""
+        "404":
+          description: vehicle not found
+          content:
+            application/json:
+              example:
+                error: "Vehicle not found"
   /api/vehicle/trips:
     get:
       summary: Get trips for past 24 hours
@@ -61,6 +97,27 @@ paths:
       responses:
         "200":
           description: trips
+          content:
+            application/json:
+              example:
+                - id: "233aea98-29bc-4830-918d-75e544283a01"
+                  vehicle_id: "d9c1b442-fb2f-412a-9d2a-a3ab499cd91c"
+                  start_time: "2025-08-31T07:49:00Z"
+                  end_time: "2025-08-31T07:50:00Z"
+                  mileage: 0.5
+                  avg_speed: 30
+                - id: "709ed6f6-38d3-4502-b009-bbc98e44c722"
+                  vehicle_id: "d9c1b442-fb2f-412a-9d2a-a3ab499cd91c"
+                  start_time: "2025-08-31T07:48:58Z"
+                  end_time: "2025-08-31T07:49:58Z"
+                  mileage: 0.5
+                  avg_speed: 30
+        "404":
+          description: trips not found
+          content:
+            application/json:
+              example:
+                error: "trips not found"
 components:
   securitySchemes:
     bearerAuth:
@@ -72,6 +129,8 @@ components:
       properties:
         vehicle_id:
           type: string
+        plate_number:
+          type: string
         status:
           type: object
           properties:
@@ -81,5 +140,27 @@ components:
                 type: number
             speed:
               type: number
+            fuel_level:
+              type: number
             timestamp:
               type: string
+      required:
+        - vehicle_id
+        - status
+    Trip:
+      type: object
+      properties:
+        id:
+          type: string
+        vehicle_id:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        mileage:
+          type: number
+        avg_speed:
+          type: number
