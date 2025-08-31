@@ -38,7 +38,6 @@ paths:
               status:
                 location: [55.296249, 25.276987]
                 speed: 60.5
-                fuel_level: 78
                 timestamp: "2025-06-17T09:12:00Z"
       responses:
         "200":
@@ -139,8 +138,6 @@ components:
               items:
                 type: number
             speed:
-              type: number
-            fuel_level:
               type: number
             timestamp:
               type: string
